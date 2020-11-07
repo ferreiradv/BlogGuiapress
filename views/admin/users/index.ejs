@@ -1,0 +1,58 @@
+<%- include('../../partials/header'); %>
+
+<body>
+    <%- include('../../partials/navbar'); %>
+
+    <div class="container">
+        <hr>
+        <h2>Usuários</h2>
+        <a href="http://localhost:8080/admin/users/create">
+            <button class="btn btn-success">Novo Usuário</button>
+        </a>
+        <hr>
+
+        <table class="table table-bordered">
+
+            <thead>
+                <!-- Titulo -->
+                <tr>
+                    <!-- Linha -->
+                    <th>ID</th><!-- Colunas -->
+                    <th>Email</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(users=>{ %>
+                <tr>
+                    <th><%=users.id%></th>
+                    <th><%=users.email%></th>
+                    <th>
+                        <form action='/users/delete' method="POST" onsubmit="confirmaDelecao(event,this)">
+                            <input type="hidden" name="id" value="<%=users.id%>">
+                            <button class="btn btn-danger">Deletar</button>
+                        </form>
+                    </th>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
+
+    </div>
+
+
+</body>
+
+<%- include('../../partials/footer'); %>
+
+<script>
+    function confirmaDelecao(event, form) {
+        event.preventDefault()
+
+        var decision = confirm('Tem certeza que deseja excluir essa conta?')
+
+        if (decision) {
+            form.submit()
+        }
+    }
+</script>
