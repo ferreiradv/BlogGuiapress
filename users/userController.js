@@ -74,4 +74,43 @@ router.post('/users/delete',(req,res)=>{
     }
 })
 
+
+router.get('/user/login',(req, res)=>{
+    res.render('login')
+})
+
+router.post('/login',(req, res)=>{
+    let email = req.body.email
+    let password = req.body.password
+
+    User.findOne({where:{email:email}}).then(user => {
+        if(user != undefined){// se existir um usuário com esse email
+            //validar senha
+            let correct = bcrypt.compareSync(password,user.password)
+
+            if(correct){
+                req.session.user = {
+                    id:user.id,
+                    email:user.email
+                }
+                res.redirect('/admin/users')
+            }else{
+                res.redirect('/user/login')
+            }
+        }else{
+            res.redirect('/user/login')
+        }
+    })
+})
+
+
+router.get('/admin/logout',(req,res)=>{
+    req.session.user = undefined
+
+    req.redirect('/')
+})
+
+
+
+
 module.exports = router

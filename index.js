@@ -5,6 +5,10 @@ const app = express();
 
 const bodyParser = require('body-parser');
 
+const session = require('express-session')
+
+
+
 const connection = require('./database/database');
 
 const categoriasController = require('./categorias/CartegoriasController')
@@ -41,6 +45,13 @@ connection.authenticate().then(()=>{
 }).catch((error)=>{
     console.log(error)
 })
+
+//Sessions
+
+app.use(session({
+    secret:'pitoco',
+    cookie:{maxAge:3000000}
+}))
 
 
 //Rotas
@@ -104,7 +115,6 @@ app.get('/category/:slug',(req,res)=>{
         }
     })
 })
-
 
 
 app.use('/',categoriasController)
